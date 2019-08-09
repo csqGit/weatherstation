@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>气象站登录</title>
+<link rel="stylesheet" href="../layui.css">
+<style type="text/css">
+body{background: rgb(117, 217, 183)}
+#main {
+	width: 100%;
+	background: rgb(0, 0, 0,.1);
+	height: 300px;
+	padding: 10px 0;
+}
+.left{float: left; line-height: 300px;}
+.right {
+	width: 500px;
+	height: 300px;
+	margin-left: 50%;
+	background: white;
+	margin: 0 auto;
+}
+
+.layui-form {
+	width: 75%;
+	padding: 20px 50px;
+}
+
+.layui-form-err {
+	width: 100px;
+	height: 35px;
+	color: red;
+	margin-left: 320px;
+	line-height: 35px;
+	padding-left: 10px;
+}
+header{height: 200px; width: 100%; color: white; font-size: 100px; text-align: center; line-height: 300px;}
+footer	{height: 200px; width: 100%;}
+#title{text-align: center; background: rgb(0, 150, 136); color: white; 
+height: 80px; line-height: 80px; font-size: 20px; font-family: Times, TimesNR, 'New Century Schoolbook', Georgia,
+ 'New York', serif;}
+</style>
+</head>
+<body>
+	<header>
+		<div style="font-variant:small-caps;">Welcome</div>
+	</header>
+	<div id="main">
+		<!-- <div class="left">用户登录</div> -->
+		<div class="right">
+			<div id="title">用户登录</div>
+			<form class="layui-form layui-form-pane"
+				action="./userController/login" method="post">
+				<div class="layui-form-item">
+					<label class="layui-form-label">用户名</label>
+					<div class="layui-input-inline">
+						<input type="text" id="username" name="username"
+							lay-verify="required" placeholder="请输入" autocomplete="off"
+							class="layui-input">
+					</div>
+					<div class="layui-form-err" th:text="${usernameErr}"></div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">密码</label>
+					<div class="layui-input-inline">
+						<input type="password" id="password" name="password"
+							placeholder="请输入密码" autocomplete="off" class="layui-input">
+					</div>
+					<div class="layui-form-err" th:text="${passwordErr}"></div>
+				</div>
+				<div style="color: red;" th:text="${systemErr}"></div>
+
+
+				<div class="layui-form-item" style="width: 150px; float: right; margin-right: -20px; margin-top: 20px;">
+					<!-- a href="http://localhost:8080/login">登录</a> -->
+					<button class="layui-btn" lay-submit="" lay-filter="demo2">登录</button>
+					<input class="layui-btn" type="reset">
+				</div>
+			</form>
+
+		</div>
+	</div>
+		<footer>
+			<div></div>
+		</footer>
+
+	<script type="text/javascript">
+		/* 	function login(){
+		 var username = $("#username").val();
+		 var password = $("#password").val();
+		 $.ajax({
+		 url : 'http://localhost:8080/userController/login',
+		 type: 'post',
+		 data: {'username' : username, 'password' : password},
+		 success: function(res){
+		
+		 }
+		 });
+		 } */
+	</script>
+
+</body>
+</html>

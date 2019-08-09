@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>设备列表页</title>
+<link rel="stylesheet" href="../layui.css">
+<link rel="stylesheet" href="../public.css">
+<link rel="stylesheet" href="../main.css">
+<!-- <link href="../examples.css" rel="stylesheet" type="text/css"> -->
+
+<script type="text/javascript"
+	src="../webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+<script type="text/javascript" src="../page.js"></script>
+<script type="text/javascript" src="../getTime.js"></script>
+<script type="text/javascript" src="../layui.js"></script>
+<script type="text/javascript" src="../format_date.js"></script>
+<script type="text/javascript" src="../lay/modules/laydate.js"></script>
+<style type="text/css">
+.layui-table{margin: 5px 10px;}
+.layui-form-item .layui-input-inline {width: 150px}
+.search{margin-left: 10px;}
+
+.title{font-size: 16px; color: white;}
+#type{color: white;}
+
+
+@font-face {
+    src: url('../fonts/iconfont.ttf');
+	src: url('../fonts/iconfonnt.woff');
+}
+</style>
+</head>
+<body>
+	<div id="header" style="height:40px;">
+		<div class="title"><span>当前位置&nbsp;&nbsp;>>&nbsp;&nbsp;</span><span id="type" th:if="${type} eq 'history'" th:text="历史数据"></span>
+			<span id="type" th:if="${type} eq 'this'" th:text="实时数据"></span>
+		</div>
+	</div>
+	<div class="none" id="location" th:text="${location}"></div>
+	<form th:action="${location}" method="get" class="search"  th:if="${type} eq 'history'">
+	<input type="hidden" name="param" th:value="${type}">
+	<div class="layui-form-item ">
+				<div class="layui-input-inline layui-input-block"  style="margin-left:0;" >
+					<select id="device" name="deviceId" lay-verify="required"
+						class="layui-input" lay-search="">
+    					<option value="">选择设备查询</option>
+						<option th:each="device:${deviceList}"  
+						th:value="${device.deviceId}" th:text="${device.deviceName}" 
+						th:selected="${device.deviceId == deviceId}" ></option>
+					</select>
+				</div>
+
+				<div class="layui-input-inline layui-input-block">
+					<div class="layui-input-inline">
+						<input type="text" name="yearMonthDayAndHourMinuteSecond"
+							id="yearMonthDayAndHourMinuteSecond" lay-verify="date"
+							autocomplete="off" class="layui-input" th:value="${yearMonthDayAndHourMinuteSecond}" placeholder="开始 - 年月日时分秒"/>
+					</div>
+				</div>
+				<div><label class="layui-form-label" style="width: 20px; padding: 9px 0px;">&nbsp;&nbsp;-&nbsp;&nbsp;</label></div>
+				<div class="layui-input-inline layui-input-block" style="margin-left: 10px;">
+					<div class="layui-input-inline">
+						<input type="text" name="yearMonthDayAndHourMinuteSecond2"
+							id="yearMonthDayAndHourMinuteSecond2" lay-verify="date"
+							autocomplete="off" class="layui-input" th:value="${yearMonthDayAndHourMinuteSecond2}" placeholder="终止- 年月日时分秒"/>
+					</div>
+				</div>
+				<input type	="submit" id="submit" class="layui-btn" value="查询" >
+				<!-- <div th:text="${alert}"></div> -->
+		</div>
+	</form>
+	
+
+	<!-- <div class="main"> -->
+	<table class="layui-table" lay-even=""  lay-skin="nob">
+		
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>所属变电站</th>
+				<th>风向(D)</th>
+				<th>风速(M)</th>
+				<th>温度(℃)</th>
+				<th>湿度(%RH)</th>
+				<th>压强(Pa)</th>
+				<th>时间</th>
+				<th th:if="${type} eq 'this'">状态</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="obj : ${weathersList}">
+				<td th:text="${objStat.index + 1}"></td>
+				<td th:text="${obj.deviceId.deviceName}"></td>
+				<td th:text="${obj.dm}"></td>
+				<td th:text="${obj.sm}"></td>
+				<td th:text="${obj.ta}"></td>
+				<td th:text="${obj.ua}"></td>
+				<td th:text="${obj.pa}"></td>
+				<td th:text="${obj.time}"></td>
+				<td th:if="${type} eq 'this'" th:text="(${obj.deviceId.deviceState}=='1')?'在线':'离线'">在线</td>
+			</tr>
+		</tbody>
+
+	</table>
+	<!-- 新加代码 start -->
+	<div class="page">
+		<div class="layui-box layui-laypage layui-laypage-default"
+			id="layui-laypage-1">
+
+			<a href="javascript:;" class="layui-laypage-pr000000000 ev"
+				onclick="selectWeatherList('index');">首页</a> <a href="javascript:;"
+				class="layui-laypage-pr000000000 ev"
+				onclick="selectWeatherList('pre');">上一页</a> <a href="javascript:;"
+				class="layui-laypage-next" onclick="selectWeatherList('next');">下一页</a>
+			<a href="javascript:;" class="layui-laypage-next"
+				onclick="selectWeatherList('last');"> 尾页</a> <a href="javascript:;"
+				class="layui-laypage-next">第<span id="currentPage" class="num"
+				th:text="${pageData.currentPage}">3</span>页
+			</a> <a href="javascript:;" class="layui-laypage-next">每页<span
+				id="limit" class="num" th:text="${pageData.limit}">100 </span>条
+			</a> <a href="javascript:;" class="layui-laypage-next">共 计<span
+				id="count" class="num" th:text="${pageData.count}">100 </span>条
+			</a> <a href="javascript:;" class="layui-laypage-next">总页数：<span
+				id="pages" class="num" th:text="${pageData.pages}">3</span>页
+			</a> <span class="layui-laypage-skip">跳转到第<input id="jump"
+				type="text" min="1" value="3" class="layui-input">页
+				<button type="button" class="layui-laypage-btn"
+					onclick="selectWeatherList('jump');">确定</button></span>
+		</div>
+	</div>
+	<!-- 新加代码 end -->
+
+</body>
+
+<script type="text/javascript">
+	var type = $("input[name='param']").val();
+	var time = 0;
+	if(type != 'history'){
+		 time = window.setInterval(function(){
+			window.location.reload();
+		}, 45000);//45秒页面刷新一次
+	}
+</script>
+
+</html>

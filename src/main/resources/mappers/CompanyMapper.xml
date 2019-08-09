@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bozpower.mapper.CompanyMapper">
+	<resultMap id="BaseResultMap" type="com.bozpower.entity.Company">
+	    <id column="id" jdbcType="INTEGER" property="id" />
+		<result column="company_name" property="companyName" jdbcType="VARCHAR"/>
+		<result column="device_number" property="deviceNumber" jdbcType="INTEGER"/>
+		<result column="remarks" property="remarks" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+    <sql id="columnSql">
+  		id, company_name, device_number, remarks
+  	</sql>
+  
+  <select id="selectCompanyById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select 
+  		<include refid="columnSql" />
+  	 from 
+  	 	company_tb 
+  	 where 
+  	 	id = #{id}
+  </select>
+  
+
+  
+  <select id="selectCompanyList"  resultMap="BaseResultMap">
+  	select 
+  		<include refid="columnSql" />
+  	 from 
+  	 	company_tb 
+  	 	<if test="pages != 0">
+	   	 	limit 
+	  	 	#{startPage},
+	  	 	#{ pages} 	 	
+  	 	</if>
+  </select>
+  
+  <select id="selectCompanyByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+  		<include refid="columnSql" />
+  	 from 
+  	 	company_tb 
+  	 where 
+  	 	company_name = #{companyName}
+  </select>
+  
+  
+	<insert id="insertCompany" parameterType="Company">
+		insert into company_tb
+			(id, company_name, device_number, remarks) 
+		values 
+			(#{id},#{companyName},#{deviceNumber},#{remarks})
+	</insert>
+	
+	<delete id="deleteCompanyById" parameterType="java.lang.Integer">
+		delete from 
+			company_tb 
+		where 
+			id = #{id}
+	</delete>
+	
+	<update id="updateCompany" parameterType="Company">
+		update company_tb 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="companyName != null">
+				company_name = #{companyName}, 
+			</if>
+			<if test="deviceNumber != null">
+				device_number = #{deviceNumber} ,
+			</if>
+			<if test="remarks != null">
+				remarks = #{remarks} ,
+			</if>
+		</trim>
+		where 
+			id = #{id}
+	</update>
+	
+	
+
+</mapper>
