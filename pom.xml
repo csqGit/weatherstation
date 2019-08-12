@@ -12,9 +12,7 @@
 	<artifactId>weatherstation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>weatherstation</name>
-	<!-- 新加代码 防止项目报错 start-->
 	<packaging>jar</packaging>
-	<!-- 新加代码 end-->
 	<description>气象站</description>
 
 	<properties>

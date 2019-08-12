@@ -41,6 +41,7 @@ public class WeathersController {
 	@RequestMapping(value = "selectDeviceData", method = RequestMethod.GET)
 	public String selectDeviceData(PageData pageData, Map<String, Object> map, String deviceId,  String yearMonthDayAndHourMinuteSecond,
 			String yearMonthDayAndHourMinuteSecond2,  String param) {
+		
 		List<Device> deviceList = deviceService.selectDeviceList(new PageData());
 		deviceList = deviceService.selectDeviceList(new PageData());
 		pageData = PagesUtils.getPageData(pageData);
@@ -179,6 +180,6 @@ public class WeathersController {
 
 	}
 
-//	
+	
 
 }

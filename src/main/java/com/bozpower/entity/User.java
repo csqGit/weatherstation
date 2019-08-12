@@ -6,6 +6,7 @@ public class User {
 	private String username;
 	private String password;
 	private Company companyId;
+	private int userPermission;//管理员权限  	0为普通用户	1为管理员
 	private String remarks;
 	
 	public User() {
@@ -48,12 +49,17 @@ public class User {
 	public void setCompanyId(Company companyId) {
 		this.companyId = companyId;
 	}
+	public int getUserPermission() {
+		return userPermission;
+	}
+	public void setUserPermission(int userPermission) {
+		this.userPermission = userPermission;
+	}
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", companyId=" + companyId
-				+ ", remarks=" + remarks + "]";
+				+ ", userPermission=" + userPermission + ", remarks=" + remarks + "]";
 	}
-
 	
 
 }

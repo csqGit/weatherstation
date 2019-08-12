@@ -26,7 +26,7 @@ public class UserController {
 	 * 用户登录
 	 * @return
 	 */
-	@RequestMapping(value = "login", method = RequestMethod.POST)
+	@RequestMapping(value = "login")
 	public String login(HttpServletRequest request,  User user) {
 		User userSuccess = null;
 		HttpSession session = request.getSession();
@@ -38,6 +38,7 @@ public class UserController {
 					session.setAttribute("user", userSuccess);
 					Company c = userSuccess.getCompanyId();
 					request.setAttribute("c", c);
+					System.out.println("user:" + userSuccess);
 					return "index";
 				}else {//登录失败
 					request.setAttribute("passwordErr", "密码错误");
@@ -54,6 +55,8 @@ public class UserController {
 			return "login";
 		}
 	}
+	
+	
 	
 	/**
 	 * 注册新用户

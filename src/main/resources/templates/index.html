@@ -95,9 +95,12 @@
         <li class="layui-nav-item">
           <a class="" href="javascript:;">系统配置</a>
           <dl class="layui-nav-child">
-            <!-- <dd><a href="../companyController/selectCompanyList" target="myiframe">单位信息</a></dd> -->
             <dd><a href="../userController/selectUser" target="myiframe">用户管理</a></dd>
             <dd><a href="../deviceController/selectDeviceList" target="myiframe">气象站配置</a></dd>
+            <!-- <dd th:text="${user.password}"><a href="../deviceController/selectDeviceList" target="myiframe">单位管理</a></dd>
+            <dd th:text="${user.username}"><a href="../deviceController/selectDeviceList" target="myiframe">单位管理</a></dd>
+            <dd th:text="${user.companyId}"><a href="../deviceController/selectDeviceList" target="myiframe">单位管理</a></dd>
+            <dd th:text="${user.userPermission}"><a href="../deviceController/selectDeviceList" target="myiframe">单位管理</a></dd> -->
           </dl>
         </li>
       </ul>
