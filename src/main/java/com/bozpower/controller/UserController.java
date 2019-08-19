@@ -1,8 +1,11 @@
 package com.bozpower.controller;
 
+import java.net.URLEncoder;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bozpower.entity.Company;
 import com.bozpower.entity.User;
+import com.bozpower.service.CompanyService;
 import com.bozpower.service.UserService;
 
 @Controller
@@ -22,40 +26,10 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	/**
-	 * 用户登录
-	 * @return
-	 */
-	@RequestMapping(value = "login")
-	public String login(HttpServletRequest request,  User user) {
-		User userSuccess = null;
-		HttpSession session = request.getSession();
-		try {
-			userSuccess = userService.selectUserByUsername(user.getUsername());
-			if(userSuccess != null) {//用户名存在
-				userSuccess = userService.userLogin(user);
-				if(userSuccess != null) {//登录成功
-					session.setAttribute("user", userSuccess);
-					Company c = userSuccess.getCompanyId();
-					request.setAttribute("c", c);
-					System.out.println("user:" + userSuccess);
-					return "index";
-				}else {//登录失败
-					request.setAttribute("passwordErr", "密码错误");
-					return "login";
-				}
-			}else {//用户名不存在
-//				map.put("usernameErr", "用户名不存在");
-				request.setAttribute("usernameErr", "用户名不存在");
-				return "login";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			request.setAttribute("systemErr", "系统错误，请刷新后登录");
-			return "login";
-		}
-	}
+	@Autowired
+	private CompanyService companyService;
 	
+
 	
 	
 	/**
@@ -70,7 +44,7 @@ public class UserController {
 			return "success";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "error";
+			return "../error/500";
 		}
 	}
 	
@@ -87,7 +61,7 @@ public class UserController {
 			return "success";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "error";
+			return "../error/500";
 		}
 	}
 	
@@ -98,40 +72,25 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "updateUser", method = RequestMethod.POST)
-	@ResponseBody
-	public String updateUser(User user) {
+//	@ResponseBody
+	public String updateUser(User user, HttpServletRequest request) {
 		try {
 			userService.updateUser(user);
-			
-			return "success";
+			request.setAttribute("user", user );
+			Company company = companyService.selectCompanyById(user.getCompanyId().getId());
+			request.setAttribute("company", company);
+			return "user";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "error";
+			user = (User) request.getSession().getAttribute("user");
+			request.setAttribute("user", user );
+			Company company = user.getCompanyId();
+			request.setAttribute("company", company);
+			return "../error/500";
 		}
 	}
 	
 	
-	/**
-	 * 查询用户集合
-	 * @param map
-	 * @param pageData
-	 * @return
-	 */
-//	@RequestMapping(value = "selectUserList", method = RequestMethod.GET)
-//	public String selectUserList(Map<Object, Object> map, HttpServletRequest request,  PageData pageData) {
-//		List<User> list = userService.selectUserList(pageData);
-//		try {
-//			HttpSession session = request.getSession();
-//			User user = (User) session.getAttribute("user");
-//			map.put("company", user.getCompanyId());
-//			map.put("userList", list);
-//			map.put("user", user);
-//			return "user";
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return "error";
-//		}
-//	}
 	
 	
 	@RequestMapping(value = "selectUser", method = RequestMethod.GET)
@@ -157,7 +116,7 @@ public class UserController {
 			if(user!= null) {
 				session.invalidate();
 			}
-			return "forward:../";
+			return "redirect:/";
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "../error/404";

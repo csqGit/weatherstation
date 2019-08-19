@@ -65,10 +65,11 @@ function setChartOption(xOldData, yOldData, xName, yName, title,
 		//计算X轴的数据点总数
 		count = ((oldLastYear - oldFirstYear) * 365 + (oldLastMonth - oldFirstMonth) * 31 
 				+ (oldLastDay - oldFirstDay)) * 24 * 60 + (oldLastHour - oldFirstHour) * 60 
-				+ (oldLastMinute - oldFirstMinute);
+				;
 
 		if (count > 60) {// X轴总共显示60个点 数据点的区间为点的总数/X轴的显示总数
 			intervalValue = count / 30;
+			count += oldLastMinute;
 		} else {
 			intervalValue = 1;
 			count = 60;
@@ -93,20 +94,24 @@ function setChartOption(xOldData, yOldData, xName, yName, title,
 			xData.push(dateStr);// 给X轴添加数据
 			// 判断请求时间在X轴的区间  //  给y轴添加数据
 			if(dateStr >= startTime && dateStr <= endTime){
-				var temp = 0;//存储i的位置,下次循环直接从该位置开始
+				var temp = 0;//标记，如果有数据，则添加，如果没有则添加-
+				var savePreData ;//存储上一条数据，如果当前没有数据，则取上一条数据作为当前的数据
 				for(var i = xDataCount; i < xOldData.length; i ++){
 					if(dateStr == xOldData[i]){
-						yData.push((yOldData[i] + "").substring(0, 6));
+						var d = (yOldData[xDataCount] + "").substring(0, 6);
+						yData.push(d);
 						xDataCount++;
 						temp = 1;
+						savePreData = d;
 						break;
 					}
 				}
-				//假数据
+				
 //				if(temp == 0)	//没有值
 //					yData.push("-");
+				//假数据
 				if(temp == 0)	//没有值
-					yData.push((yOldData[xDataCount] + "").substring(0, 6));
+					yData.push(savePreData);
 			}else
 				yData.push("-");
 			len++;
@@ -144,7 +149,18 @@ function setEchartDataOption(title, xName, xData, legendData, intervalValue,
 		},
 		show : true,
 		tooltip : {// 鼠标悬浮时的提示信息
-			trigger : 'item'// yxis item
+			trigger : 'axis'// axis item
+//			,showContent : true
+			,showDelay : 0//设置提示框显示的速度0为没有延迟，数值越大，延迟越大
+			,transitionDuration: 0.4
+			,axisPointer: {
+				type: 'none',//'line' | 'cross' | 'shadow' | 'none'(无)
+			    crossStyle: {
+			        color: 'green',
+			        width: 1,
+			        type: 'dashed'
+			    }
+			} 
 		},
 		grid : {
 			y2 : 90
@@ -177,6 +193,10 @@ function setEchartDataOption(title, xName, xData, legendData, intervalValue,
 		xAxis : {
 			name : xName,
 			data : xData,
+//			nameTextStyle: {//设置x轴标签的属性
+//				fontSize: 11,
+//				color: 'red'
+//			},
 			axisLine : {
 				lineStyle : {
 					color : 'rgb(51,171,160)'
@@ -184,8 +204,9 @@ function setEchartDataOption(title, xName, xData, legendData, intervalValue,
 			},
 			axisLabel : {
 				show : true,
-				interval : intervalValue,// 表示数据间的显示间隔，0表示所有数据全部显示，1表示1隔1显示，2表示1隔2显示，以此类推
-				rotate : 45// 表示数字倾斜程度
+				interval : 'auto',//intervalValue,// 表示数据间的显示间隔，0表示所有数据全部显示，1表示1隔1显示，2表示1隔2显示，以此类推
+				rotate : 45,// 表示数字倾斜程度
+				
 			},
 			splitLine : {
 				show : true,
@@ -200,6 +221,7 @@ function setEchartDataOption(title, xName, xData, legendData, intervalValue,
 		yAxis : {// y轴的单位和数据
 			name : yName,
 			type : 'value',
+//			splitNumber : 1,
 			scale : true,
 			axisLine : {
 				lineStyle : {
@@ -222,6 +244,7 @@ function setEchartDataOption(title, xName, xData, legendData, intervalValue,
 	}, true);
 
 	if(xData.length > 0){
+		//alert("xData:" + xData.length + ",yData: " + yData.length)
 		myChart.setSeries([ {// 这是纵轴
 			name : yName,
 			type : 'line',
@@ -230,15 +253,25 @@ function setEchartDataOption(title, xName, xData, legendData, intervalValue,
 					color: 'rgb(51,171,160)'
 				}
 			},
-			data : yData,//设置数据
+			data : yData,//添加数据
 			markPoint : {//设置线段的最值
 				data : [ {
 					type : 'max',
 					name : '最大值'
+					,value : '22.3'
 				}, {
 					type : 'min',
 					name : '最小值'
-				} ]
+				} ],
+//				itemStyle: {
+//					normal: {
+//						lable: {
+//							show : true,
+//							position: 'right',
+//							
+//						}
+//					}
+//				}
 			}
 		} ]);
 	}else {

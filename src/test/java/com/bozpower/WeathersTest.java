@@ -69,11 +69,11 @@ public class WeathersTest {
 //						new PageData(), 
 //						1, 
 //						"2019-07-25 06");
-		list = weathersMapper
-				.selectDeviceWeathersHistoryDataByYMD(
-						new PageData(), 
-					"1",
-						"2019-07-25");
+//		list = weathersMapper
+//				.selectDeviceWeathersHistoryDataByYMD(
+//						new PageData(), 
+//					"1",
+//						"2019-07-25");
 		System.out.println(list);
 	}
 	
@@ -87,7 +87,7 @@ public class WeathersTest {
 		Company c = new Company();
 		c.setId(1);
 		weathers.setCompanyId(c);
-		List<Weathers> list = weathersMapper.selectDeviceAllThisData(new PageData());
+		List<Weathers> list = weathersMapper.selectDeviceAllThisData(new PageData(), 1);
 		System.out.println(list);
 	}
 

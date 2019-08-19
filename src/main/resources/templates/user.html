@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>用户列表</title>
 <link rel="stylesheet" href="../layui.css">
+<link rel="stylesheet" href="../head.css">
 <link rel="stylesheet"
 	href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
@@ -17,13 +18,7 @@
 	margin: 10px;
 }
 
-#header {
-	height: 40px;
-	line-height: 40px;
-	font-size: 16px;
-	background: rgb(0, 150, 136); line-height: 40px; padding-left: 10px;
-	color: white;
-}
+
 table tbody tr {
 	text-align: center;
 }
@@ -85,7 +80,7 @@ a:hover {
 </head>
 <body>
 	<header>
-		<div id="header"><span>当前位置&nbsp;&nbsp;>>&nbsp;&nbsp;</span>用户管理</div>
+		<div id="header"><img alt="" src="../head_add.png"><span>当前位置&nbsp;&nbsp;>>&nbsp;&nbsp;</span>用户管理</div>
 	</header>
 	<div id="main">
 
@@ -97,6 +92,7 @@ a:hover {
 					<th>用户名</th>
 					<th>密码</th>
 					<th>单位名称</th>
+					<th>气象站总数（台）</th>
 					<th>操作</th>
 				</tr>
 			</thead>
@@ -104,11 +100,12 @@ a:hover {
 				<tr height="40px">
 					<td th:text="1" width="10%"></td>
 					<td th:text="${user.username}" width="20%"></td>
-					<td width="20%" th:text="${user.password}">***</td>
-					<td width="30%" th:text="${user.companyId.companyName}"></td>
-					<td><button type="button" class="layui-btn"
-							th:value="${user.id}" width="20%" data-toggle="modal"
-							data-target="#myModal">编辑</button> <!-- <button type="button" class="layui-btn layui-btn-danger" th:value="${user.id}">删除</button> -->
+					<td width="20%">******</td>
+					<td width="20%" th:text="${company.companyName}"></td>
+					<td width="15%" th:text="${company.deviceNumber}">0</td>
+					<td width="15%"><button type="button" class="layui-btn"
+							th:value="${user.id}"  data-toggle="modal"
+							data-target="#myModal">编辑</button> 
 					</td>
 				</tr>
 
@@ -135,29 +132,30 @@ a:hover {
 				</div>
 				<div class="modal-body">
 					<div id="message" style="dispaly: none;"></div>
-					<form id="myForm" action="">
-						<input type="hidden" th:value="${user.id}" id="userId">
+					<form id="myForm" action="../userController/updateUser" method="post">
+						<input type="hidden" name="id" th:value="${user.id}" id="userId">
+						
 						<div class="layui-inline layui-input-block">
-							<label class="layui-form-label">单位名称</label>
+							<label class="layui-form-label">用&nbsp;户&nbsp;名</label>
 							<div class="layui-input-inline">
-								<select class="form-control" id="companyId">
-									<option th:text="${company.companyName}"
-										th:value="${company.id}"></option>
-								</select>
-							</div>
-						</div>
-						<div class="layui-inline layui-input-block">
-							<label class="layui-form-label">用户名</label>
-							<div class="layui-input-inline">
-								<input class="layui-input" type="text" name="name" id="username"
+								<input class="layui-input" type="text" name="username" id="username"
 									th:value="${user.username}" />
 							</div>
 						</div>
 						<div class="layui-inline layui-input-block">
-							<label class="layui-form-label">密码</label>
+							<label class="layui-form-label">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</label>
 							<div class="layui-input-inline">
-								<input class="layui-input" type="password" name="password"
+								<input class="layui-input"  type="password" name="password"
 									id="password" th:value="${user.password}" />
+							</div>
+						</div>
+						<div class="layui-inline layui-input-block">
+							<label class="layui-form-label">单位名称</label>
+							<div class="layui-input-inline">
+								<select class="form-control"  id="companyId"  name="companyId.id">
+									<option th:text="${company.companyName}"
+										th:value="${company.id}"></option>
+								</select>
 							</div>
 						</div>
 					</form>
@@ -165,15 +163,18 @@ a:hover {
 				<div class="modal-footer">
 					<button type="button" id="updateUser" class="btn btn-primary">
 						提交更改</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">
-						关闭</button>
+					<!-- <button type="button" class="btn btn-default" data-dismiss="modal">
+						关闭</button> -->
 				</div>
 			</div>
 			<!-- /.modal-content -->
 		</div>
 		<!-- /.modal-dialog -->
 	</div>
+	<script type="text/javascript">
+		
+	</script>
 	<!-- /.modal -->
-	<script type="text/javascript" src="../user.js"></script>
+<script type="text/javascript" src="../user.js"></script>
 </body>
 </html>

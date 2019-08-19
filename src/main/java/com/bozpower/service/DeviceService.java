@@ -8,7 +8,7 @@ import com.bozpower.entity.PageData;
 public interface DeviceService {
 	public Device selectDeviceById(int id);
 	
-	public List<Device> selectDeviceList(PageData pageData);
+	public List<Device> selectDeviceList(PageData pageData, Integer companyId);
 	
 	public Device selectDeviceByName(String deviceName);
 	

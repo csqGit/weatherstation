@@ -40,7 +40,7 @@ public class DeviceTest {
 		PageData pageData = new PageData();
 		pageData.setStartPage(0);
 		pageData.setPages(2);
-		List<Device> d = deviceMapper.selectDeviceList(pageData);
+		List<Device> d = deviceMapper.selectDeviceList(pageData, 9);
 		System.out.println(d);
 	}
 	

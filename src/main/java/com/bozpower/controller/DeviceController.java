@@ -17,6 +17,7 @@ import com.bozpower.entity.Device;
 import com.bozpower.entity.PageData;
 import com.bozpower.entity.User;
 import com.bozpower.service.DeviceService;
+import com.bozpower.utils.RequestUtils;
 
 @Controller
 @RequestMapping("/deviceController")
@@ -53,18 +54,19 @@ public class DeviceController {
 	 * @return
 	 */
 	@RequestMapping(value = "selectDeviceList", method = RequestMethod.GET)
-//	@ResponseBody
 	public String selectDeviceList(PageData pageData, HttpServletRequest request, Map<String, Object> map){
 		try {
-			List<Device> deviceList = deviceService.selectDeviceList(pageData);
 			HttpSession session = request.getSession();
 			User user = (User) session.getAttribute("user");
+			int companyId = new RequestUtils().getCompanyId(request);
+			List<Device> deviceList = deviceService.selectDeviceList(pageData, companyId);
+			
 			map.put("deviceList", deviceList);
 			map.put("company", user.getCompanyId());
 			return "device";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "error/500";
+			return "../error/500";
 		}
 	}
 	
@@ -74,9 +76,12 @@ public class DeviceController {
 	 */
 	@RequestMapping(value = "selectDeviceListJSON", method = RequestMethod.GET)
 	@ResponseBody
-	public List<Device> selectDeviceListJSON(){
+	public List<Device> selectDeviceListJSON(HttpServletRequest request){
 		try {
-			List<Device> device = deviceService.selectDeviceList(new PageData());
+			HttpSession session = request.getSession();
+			User user = (User) session.getAttribute("user");
+			Company company = user.getCompanyId();
+			List<Device> device = deviceService.selectDeviceList(new PageData(), company.getId());
 			return device;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,14 +118,14 @@ public class DeviceController {
 	 * @return
 	 */
 	@RequestMapping(value = "insertDevice", method = RequestMethod.POST)
-	@ResponseBody
-	public String insertDevice(Device device) {
+//	@ResponseBody
+	public String insertDevice(HttpServletRequest request, Map<String, Object> map, Device device) {
 		try {
 			deviceService.insertDevice(device);
-			return "success";
+			return "redirect:selectDeviceList";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "error";
+			return "../error/500";
 		}
 	}
 	
@@ -132,17 +137,14 @@ public class DeviceController {
 	 * @return
 	 */
 	@RequestMapping(value = "updateDevice", method = RequestMethod.POST)
-	@ResponseBody
 	public String updateDevice(Device device) {
 		try {
-			Company c = new Company();
-			c.setId(1);
-			device.setCompanyId(c);
+			
 			deviceService.updateDevice(device);
-			return "success";
+			return "redirect:selectDeviceList";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "error/500";
+			return "../error/500";
 		}
 	}
 	
@@ -160,7 +162,7 @@ public class DeviceController {
 			return "success";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "error";
+			return "../error/500";
 		}
 	}
 	
@@ -173,7 +175,7 @@ public class DeviceController {
 			device = deviceService.selectDeviceNameByDeviceId(deviceId);
 			map.put("device", device);
 		} catch (Exception e) {
-			// TODO: handle exception
+			return null;
 		}
 		return device;
 	}

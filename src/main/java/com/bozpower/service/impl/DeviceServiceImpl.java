@@ -22,8 +22,9 @@ public class DeviceServiceImpl implements DeviceService {
 	}
 
 	@Override
-	public List<Device> selectDeviceList(PageData pageData) {
-		return deviceMapper.selectDeviceList(pageData);
+	public List<Device> selectDeviceList(PageData pageData,  Integer companyId) {
+//		System.out.println(1/0);
+		return deviceMapper.selectDeviceList(pageData, companyId);
 	}
 
 	@Override

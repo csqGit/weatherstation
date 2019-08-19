@@ -5,7 +5,7 @@ import com.bozpower.entity.PageData;
 public class PagesUtils {
 	
 	//分页数默认为10页
-	public static int limit = 10;
+	public static int limit = 12;
 	
 	public static PageData getPageData(PageData pageData) {
 		if(pageData.getLimit() == 0) {//

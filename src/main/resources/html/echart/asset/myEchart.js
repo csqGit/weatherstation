@@ -20,7 +20,7 @@ window.onload = function() {
 					+ type);
 
 	document.getElementById("deviceId").value = deviceId;
-	getDeviceName(deviceId);
+//	getDeviceName(deviceId);
 	// 获取存放图标容器
 	var domMain = document.getElementById("main");
 	// 加载初始化图表文件echarts
@@ -29,19 +29,19 @@ window.onload = function() {
 	formData("init");
 }
 
-function getDeviceName(deviceId){
-	$.ajax({
-		url: '../deviceController/selectDeviceNameByDeviceId',
-		type: 'POST',
-		data : {'deviceId' : deviceId},
-		success: function(res){
-			$("#deviceName").html(res.deviceName);
-		},
-		error : function(err) {
-			// alert("请求错误")
-		}
-	});
-}
+//function getDeviceName(deviceId){
+//	$.ajax({
+//		url: '../deviceController/selectDeviceNameByDeviceId',
+//		type: 'POST',
+//		data : {'deviceId' : deviceId},
+//		success: function(res){
+//			$("#deviceName").html(res.deviceName);
+//		},
+//		error : function(err) {
+//			// alert("请求错误")
+//		}
+//	});
+//}
 
 var formatterValue;
 // 处理请求类型显示
@@ -154,6 +154,8 @@ function formatFormDate(requestData) {
 
 // 请求成功后回调
 function requestSuccess(res, formDate) {
+	
+	
 	var xName = "时间";
 	var yName = titleType;
 	var title = "";
@@ -163,11 +165,14 @@ function requestSuccess(res, formDate) {
 
 	myChart.hideLoading();// 隐藏动态加载图片
 	var len = res.length;
-	if (len > 0)
+	if (len > 0){
 		title = res[0].time + "~" + res[len - 1].time;
+		$("#deviceName").html(res[0].deviceId.deviceName);
+		//alert(res[0].deviceId.deviceName)
+	}
 	// 给x轴添加数据
 	for (var i = 0; i < res.length; i++) {
-		var xValue = res[i].id + "";
+		//var xValue = res[i].id + "";
 		var time = res[i].time;
 		xData.push(time.substring(0, time.length - 3));
 	}

@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public User userLogin(User user) {
-		
+//		System.out.println(1/0);
 		return userMapper.userLogin(user);
 	}
 

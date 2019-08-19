@@ -32,13 +32,14 @@ public interface WeathersMapper {
 	 * @param weather
 	 * @return
 	 */
-	List<Weathers> selectDeviceAllThisData(@Param("pageData") PageData pageData);
+	List<Weathers> selectDeviceAllThisData(@Param("pageData") PageData pageData,@Param("companyId")  int companyId);
+	
 	
 	/**
 	 * 查询所有设备的实时数据的总条数
 	 * @return
 	 */
-	int selectDeviceAllThisDataCount();
+	int selectDeviceAllThisDataCount(@Param("companyId")  int companyId);
 	
 	
 	/**c
@@ -52,13 +53,18 @@ public interface WeathersMapper {
 	List<Weathers> selectDeviceWeathersHistoryDataByYMDSAndHMSS( 
 			@Param("pageData") PageData pageData,
 			@Param("deviceId") String deviceId,
+			@Param("companyId") int companyId,
 			@Param("startTime") String startTime, 
 			@Param("endTime") String endTime);
 	
 	int selectDeviceWeathersHistoryDataCountByYMDSAndHMSS( 
 			@Param("deviceId") String deviceId,
+			@Param("companyId") int companyId,
 			@Param("startTime") String startTime, 
 			@Param("endTime") String endTime);
+	
+	
+	
 	/**
 	 * 查询年月日时分秒的数据集合
 	 * @param pageData
@@ -67,10 +73,10 @@ public interface WeathersMapper {
 	 * @param endTime 结束时间的时分秒相同
 	 * @return
 	 */
-	List<Weathers> selectDeviceWeathersHistoryDataByYMDAndHMS(
-			@Param("pageData") PageData pageData,
-			@Param("deviceId") String deviceId,
-			@Param("time") String time);
+//	List<Weathers> selectDeviceWeathersHistoryDataByYMDAndHMS(
+//			@Param("pageData") PageData pageData,
+//			@Param("deviceId") String deviceId,
+//			@Param("time") String time);
 	
 	
 	/**
@@ -79,9 +85,9 @@ public interface WeathersMapper {
 	 * @param time
 	 * @return
 	 */
-	int selectDeviceWeathersHistoryDataCountByYMDAndHMS(
-			@Param("deviceId") String deviceId,
-			@Param("time") String time);
+//	int selectDeviceWeathersHistoryDataCountByYMDAndHMS(
+//			@Param("deviceId") String deviceId,
+//			@Param("time") String time);
 	
 	
 	
@@ -92,10 +98,10 @@ public interface WeathersMapper {
 	 * @param time
 	 * @return
 	 */
-	List<Weathers> selectDeviceWeathersHistoryDataByYMD(
-			@Param("pageData") PageData pageData,
-			@Param("deviceId") String deviceId,
-			@Param("time") String time);
+//	List<Weathers> selectDeviceWeathersHistoryDataByYMD(
+//			@Param("pageData") PageData pageData,
+//			@Param("deviceId") String deviceId,
+//			@Param("time") String time);
 	
 	
 	/**
@@ -104,9 +110,9 @@ public interface WeathersMapper {
 	 * @param time
 	 * @return
 	 */
-	int selectDeviceWeathersHistoryDataCountByYMD(
-			@Param("deviceId") String deviceId,
-			@Param("time") String time);
+//	int selectDeviceWeathersHistoryDataCountByYMD(
+//			@Param("deviceId") String deviceId,
+//			@Param("time") String time);
 	
 	
 	
@@ -116,10 +122,11 @@ public interface WeathersMapper {
 	 * @return
 	 */
 	List<Weathers> selectDeviceAllWeathersHistoryDataList(
-			@Param("pageData") PageData pageData);
+			@Param("pageData") PageData pageData,
+			@Param("companyId") int companyId);
 	
 	
-	int selectDeviceAllWeathersHistoryDataCount();
+	int selectDeviceAllWeathersHistoryDataCount(@Param("companyId") int companyId);
 	
 	
 	/**
@@ -148,10 +155,10 @@ public interface WeathersMapper {
 	 * @param time
 	 * @return
 	 */
-	List<Weathers> selectDeviceWeathersHistoryDataByYMAndDeviceId(
-			@Param("pageData") PageData pageData,
-			@Param("deviceId") String deviceId,
-			@Param("time") String time );
+//	List<Weathers> selectDeviceWeathersHistoryDataByYMAndDeviceId(
+//			@Param("pageData") PageData pageData,
+//			@Param("deviceId") String deviceId,
+//			@Param("time") String time );
 	
 	/**
 	 * 按年月查询id为deviceId的数据总数
@@ -159,9 +166,9 @@ public interface WeathersMapper {
 	 * @param time
 	 * @return
 	 */
-	int selectDeviceWeathersHistoryDataCountByYMAndDeviceId(
-			@Param("deviceId") String deviceId,
-			@Param("time") String time );
+//	int selectDeviceWeathersHistoryDataCountByYMAndDeviceId(
+//			@Param("deviceId") String deviceId,
+//			@Param("time") String time );
 	
 	
 	
@@ -172,7 +179,7 @@ public interface WeathersMapper {
 	 * @param time
 	 * @return
 	 */
-	List<Weathers> selectDeviceWeathersHistoryDataByYearAndDeviceId(
+	List<Weathers> selectDeviceWeathersHistoryDataByDeviceIdAndTime(
 			@Param("pageData") PageData pageData,
 			@Param("deviceId") String deviceId,
 			@Param("time") String time );
@@ -183,12 +190,19 @@ public interface WeathersMapper {
 	 * @param time
 	 * @return
 	 */
-	int selectDeviceWeathersHistoryDataCountByYearAndDeviceId(
+	int selectDeviceWeathersHistoryDataCountByDeviceIdAndTime(
 			@Param("deviceId") String deviceId,
 			@Param("time") String time );
 	
 	
-	List<Weathers> selectHistoryDataJSONList(@Param("time") String time);
+//	List<Weathers> selectHistoryDataJSONList(@Param("time") String time);
+	
+	List<Weathers> selectDeviceDataByDeviceIdAndTypeAndTime(
+			@Param("type")Integer type,
+			@Param("deviceId")String deviceId,
+			@Param("time")String time,
+			@Param("startTime")String startTime, 
+			@Param("endTime")String endTime);
 	
 
 }

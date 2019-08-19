@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>图像统计</title>
+<link rel="stylesheet" href="./layui.css">
+
+	
+<script src="./echart/asset/echarts-all.js"
+		type="text/javascript"></script>
+<script type="text/javascript" src="./echart/asset/echarts.js"></script>		
+	
+<script type="text/javascript"
+	src="./jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="./layui.js"></script>
+
+<script type="text/javascript"
+	src="./format_date.js"></script>
+<style type="text/css">
+#head {
+	width: 100%;
+	height: 50px;
+}
+
+.layui-form-item {
+	padding-top: 10px;
+}
+
+.layui-form-item .layui-input-inline {
+	width: 150px
+}
+
+.layui-input-block {
+	margin-left: 20px;
+}
+
+#main {
+	margin-top: 20px;
+}
+#foot{width: 100%; height: 30px; }
+#foot a{display: block; padding-left: 20px; line-height: 30px;}
+
+#deviceName{float: left; width: auto; padding: 0 10px; margin-left: 10px; 
+height: 40px; line-height: 40px; color: rgb(0, 150, 136); font-size: 16px; letter-spacing: 2px;}
+</style>
+</head>
+
+<body>
+	<header>
+	<div id="head">饼图</div>
+		<!-- <div id="head"><a href="http://localhost:8080/pageLocationController/page?param=fx">返回</a> -->
+		<!-- <div id="head">
+			<div class="layui-form-item ">
+				<div id="deviceName"></div>
+				<div>
+					<input type="hidden" id="deviceId" value="">
+				</div>
+
+				
+				<div class="layui-input-inline layui-input-block">
+					<div class="layui-input-inline">
+						<input type="text" name="yearMonthDayAndHourMinuteSecond"
+							id="yearMonthDayAndHourMinuteSecond" lay-verify="date"
+							autocomplete="off" class="layui-input" placeholder="开始 - 年月日时分秒"/>
+					</div>
+				</div>
+				<div><label class="layui-form-label" style="width: 20px; padding: 9px 0px;">&nbsp;&nbsp;-&nbsp;&nbsp;</label></div>
+				<div class="layui-input-inline layui-input-block" style="margin-left: 10px;">
+					<div class="layui-input-inline">
+						<input type="text" name="yearMonthDayAndHourMinuteSecond"
+							id="yearMonthDayAndHourMinuteSecond2" lay-verify="date"
+							autocomplete="off" class="layui-input" placeholder="终止- 年月日时分秒"/>
+					</div>
+				</div>
+				<button type="submit" id="submit" class="layui-btn" value="查询"
+					onclick="formData('form');">查询</button>
+				<div th:text="${alert}"></div>
+			</div>
+		</div> -->
+	</header>
+	<div id="main"
+		style="width: 98%; height: 540px;  margin: 10px 5px 5px 10px; border: 1px solid rgb(0, 150, 136);"></div>
+	<div>
+	</div>
+
+	<footer>
+		<div id="foot"><a href="">返回</a></div>
+	</footer>
+	
+<script type="text/javascript">
+var domMain, myChart;
+	window.onload = function(){
+		domMain = document.getElementById("main");
+		myChart = echarts.init(domMain);
+		myChart.setOption({
+			  title : {
+				 text : '用户访问',
+				 
+				 x : 'center'
+			 },
+			 tooltip: {
+				 trigger: 'item',
+				 formatter: "{a}<br/>{b}:{c}({d}%)"//{a} <br/>{b} : {c} ({d}%)
+			 },
+			    legend: {
+			        orient : 'vertical',
+			        x : 'left',
+			        data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+			    },
+			 toolbox: {
+			        show : true,
+			        feature : {
+			            mark : {show: true},
+			            //dataView : {show: true, readOnly: false},
+			            magicType : {
+			                show: true, 
+			                type: ['pie', 'funnel'],
+			                option: {
+			                    funnel: {
+			                        x: '25%',
+			                        width: '50%',
+			                        funnelAlign: 'left',
+			                        max: 1548
+			                    }
+			                }
+			            },
+			            restore : {show: true},
+			            saveAsImage : {show: true},
+			      		
+			        }
+			    },
+			 calculable: true,
+			 series: [
+				 /* {
+					 name : '数据来源',
+					 type : 'pie',
+					 radius : '55%',
+					 center: ['50%', '60%'],
+					 data: [
+						 {value:335, name:'直接访问'},
+			                {value:310, name:'邮件营销'},
+			                {value:234, name:'联盟广告'},
+			                {value:135, name:'视频广告'},
+			                {value:1548, name:'搜索引擎'}
+					 ]
+				 } */
+			 ] 
+		});
+		
+		
+		myChart.setSeries([
+			{
+				name: '异步加载',
+				type: 'pie',
+				radius: '55%',
+				center: ['50%', '60%'],
+				data : [
+					{value: 335, name: '直接访问'}
+					,{value: 500, name: '邮件营销'}
+					,{value: 600, name: '联盟广告'}
+					,{value:135, name:'视频广告'},
+	                {value:1548, name:'搜索引擎'}
+				]
+			}
+		]); 
+	}
+	
+	
+	
+</script>
+
+	
+</body>
+</html>

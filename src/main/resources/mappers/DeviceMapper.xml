@@ -33,11 +33,13 @@
   	left join
   		company_tb c
   	on
-  		d.company_id = c.id 
-  		<if test="limit != 0">
+  		d.company_id = #{companyId}
+  	where d.company_id = c.id
+  		<if test="pageData.limit != 0">
   	limit
-  			#{startPage},
-  			#{limit}
+  		#{pageData.startPage},
+  			#{pageData.limit}
+  			
   		</if>
   </select>
   

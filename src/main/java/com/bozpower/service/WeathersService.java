@@ -15,13 +15,13 @@ public interface WeathersService {
 	 * @param weather
 	 * @return
 	 */
-	List<Weathers> selectDeviceAllThisData(PageData pageData);
+	List<Weathers> selectDeviceAllThisData(PageData pageData, int companyId);
 	
 	/**
 	 * 查询所有设备的实时数据的总条数
 	 * @return
 	 */
-	int selectDeviceAllThisDataCount();
+	int selectDeviceAllThisDataCount(int companyId);
 	
 	/**c
 	 * 分页查询设备id=deviceId在时间段(startTime, endTime)内的数据
@@ -32,11 +32,11 @@ public interface WeathersService {
 	 * @return
 	 */
 	List<Weathers> selectDeviceWeathersHistoryDataByYMDSAndHMSS( PageData pageData,
-			String deviceId, String startTime,  String endTime);
+			String deviceId, int companyId,  String startTime,  String endTime);
 	
 	
 	int selectDeviceWeathersHistoryDataCountByYMDSAndHMSS( 
-			String deviceId, String startTime,  String endTime);
+			String deviceId,  int companyId, String startTime,  String endTime);
 	
 
 	
@@ -91,14 +91,14 @@ public interface WeathersService {
 	 * @param pageData
 	 * @return
 	 */
-	List<Weathers> selectDeviceAllWeathersHistoryDataList(PageData pageData);
+	List<Weathers> selectDeviceAllWeathersHistoryDataList(PageData pageData, int companyId);
 	
 	
 	/**
 	 * 查询所有设备的历史总数
 	 * @return
 	 */
-	int selectDeviceAllWeathersHistoryDataCount();
+	int selectDeviceAllWeathersHistoryDataCount(int companyId);
 	
 	
 	
@@ -139,8 +139,8 @@ public interface WeathersService {
 	 * @return
 	 */
 	int selectDeviceWeathersHistoryDataCountByYMAndDeviceId(
-			@Param("deviceId") String deviceId,
-			@Param("time") String time );
+			 String deviceId,
+			String time );
 	
 	
 	/**
@@ -150,15 +150,15 @@ public interface WeathersService {
 	 * @param time
 	 * @return
 	 */
-	List<Weathers> selectDeviceWeathersHistoryDataByYearAndDeviceId(
+	List<Weathers> selectDeviceWeathersHistoryDataByDeviceIdAndTime(
 			PageData pageData,
 			String deviceId,
 			String time );
 	
 	
-	int selectDeviceWeathersHistoryDataCountByYearAndDeviceId(
-			@Param("deviceId") String deviceId,
-			@Param("time") String time );
+	int selectDeviceWeathersHistoryDataCountByDeviceIdAndTime(
+			 String deviceId,
+			 String time );
 	
 	
 	
@@ -166,7 +166,10 @@ public interface WeathersService {
 	
 	
 	
-	
+	List<Weathers> selectDeviceDataByDeviceIdAndTypeAndTime(
+			Integer type,
+			String deviceId,
+			String time);
 	
 	
 	

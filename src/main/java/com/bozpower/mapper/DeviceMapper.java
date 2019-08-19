@@ -3,6 +3,7 @@ package com.bozpower.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.bozpower.entity.Device;
 import com.bozpower.entity.PageData;
@@ -12,7 +13,7 @@ public interface DeviceMapper {
 
 	public Device selectDeviceById(int id);
 	
-	public List<Device> selectDeviceList(PageData pageData);
+	public List<Device> selectDeviceList(@Param("pageData")PageData pageData, @Param("companyId") Integer companyId);
 	
 	public Device selectDeviceNameByDeviceId(String deviceId) ;
 	

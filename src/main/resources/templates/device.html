@@ -10,23 +10,22 @@
 <script
 	src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="../layui.css">
+<link rel="stylesheet" href="../head.css">
 <script type="text/javascript"
 	src="../webjars/jquery/3.4.1/dist/jquery.min.js"></script>
 <script src="../layui.js" type="text/javascript"></script>
 <style type="text/css">
 #main {
 	margin: 10px;
+	overflow-y: scroll;
+
 }
-#header {
-	height: 40px;
-	line-height: 40px;
-	font-size: 16px;
-	background: rgb(0, 150, 136); line-height: 40px; padding-left: 10px;
-	color: white;
-}
+
 table tbody tr {
 	text-align: center;
 }
+
+.layui-table, .layui-table-view{margin: 0;}
 
 .layui-table td, .layui-table th {
 	text-align: center;
@@ -61,20 +60,24 @@ a:hover {
 }
 #message, #message2{width: 100%; height: 50px; line-height: 50px; text-align: center; display: none;}
 </style>
+	<script type="text/javascript" src="../device.js"></script>
+	<script type="text/javascript" >
+		
+	</script>
 </head>
 <body>
 	<header>
-		<div id="header"><span>当前位置&nbsp;&nbsp;>>&nbsp;&nbsp;</span>气象站配置</div>
+		<div id="header"><img alt="" src="../head_add.png"><span>当前位置&nbsp;&nbsp;>>&nbsp;&nbsp;</span>气象站配置</div>
 	</header>
-	<div id="main">
+	<div id="main" style="">
 
-		<table class="layui-table" lay-even="" lay-skin="row">
+		<table class="layui-table main_tb"  lay-even="" lay-skin="row">
 
 			<thead>
 				<tr height="45px">
 					<th>编号</th>
+					<th>单位名称</th>
 					<th>变电站名称</th>
-					<th>气象站名称</th>
 					<th>气象站编号</th>
 					<th>操作</th>
 				</tr>
@@ -87,8 +90,8 @@ a:hover {
 					<td th:text="${obj.deviceId}" width="20%"></td>
 					<td width="20%">
 						<button type="button" class="layui-btn deviceEdit"  th:value="${obj.id}" th:deviceName="${obj.deviceName}"
-						th:deviceId="${obj.deviceId}" data-toggle="modal" data-target="#myModalUpdate">编辑</button>
-						<button type="button" class="layui-btn layui-btn-danger"
+						th:deviceId="${obj.deviceId}" data-toggle="modal" data-target="#myModal">编辑</button>
+						<button type="button" class="layui-btn layui-btn-danger" 
 							th:value="${obj.id}">删除</button>
 					</td>
 				</tr>
@@ -99,7 +102,7 @@ a:hover {
 	</div>
 
 	<div class="add">
-		<button type="button" class="layui-btn" data-toggle="modal"
+		<button type="button" class="layui-btn add" data-toggle="modal" 
 			data-target="#myModal"
 			style="height: 35px; line-height: 35px; margin-left: 10px;">新增气象台</button>
 		<button type="button" onclick="flush();" class="layui-btn layui-btn-normal"
@@ -115,29 +118,30 @@ a:hover {
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true">×</button>
-					<h4 class="modal-title" id="myModalLabel">新增气象台信息</h4>
+					<h4 class="modal-title" id="myModalLabel"></h4>
 				</div>
 				<div class="modal-body layui-form-item">
-					<div id="message"></div>
-					<form id="myForm" action="">
+					<!-- <div id="message"></div> -->
+					<form id="myForm" action="" method="post">
+					<input type="hidden" name="id" value="">
 							<div class="layui-inline layui-input-block">
 							<label class="layui-form-label">单位名称</label>
 								<div class="layui-input-inline">
-									<select class="form-control" id="companyId" >
+									<select class="form-control" id="companyId" name="companyId.id" >
 										<option th:value="${company.id}" th:text="${company.companyName}"></option>
 									</select>
 								</div>
 							</div>
 						<div class="layui-inline layui-input-block">
-							<label class="layui-form-label">气象台名称</label>
+							<label class="layui-form-label">变电站名称</label>
 							<div class="layui-input-inline">
-								<input id="deviceName" class="layui-input" type="text" value="" />
+								<input id="deviceName" name="deviceName" class="layui-input" type="text" value="" />
 							</div>
 						</div>
 						<div class="layui-inline layui-input-block">
 							<label class="layui-form-label">气象台编号</label>
 							<div class="layui-input-inline">
-								<input id="deviceId" class="layui-input" type="text" value="" />
+								<input id="deviceId" name="deviceId" class="layui-input" type="text" value="" />
 							</div>
 						</div>
 					</form>
@@ -177,7 +181,7 @@ a:hover {
 								</div>
 							</div>
 						<div class="layui-inline layui-input-block">
-							<label class="layui-form-label">气象台名称</label>
+							<label class="layui-form-label">变电站名称</label>
 							<div class="layui-input-inline">
 								<input id="deviceNameUpdate" class="layui-input" type="text" value="" />
 							</div>
@@ -201,115 +205,7 @@ a:hover {
 		<!-- /.modal-dialog -->
 	</div>
 	<!-- /.modal -->
-	<script type="text/javascript">
-	
-	function flush(){
-		window.location.reload();
-	}
-		$(function(){
-			$(".deviceEdit").click(function(){
-				var deviceName = $(this).attr('deviceName');
-				var deviceId = $(this).attr('deviceId');
-				$("#deviceNameUpdate").val(deviceName);
-				$("#deviceId2").val(deviceId);
-				$(this).attr('id', 'active');
-			});
-			
-			
-			//修改气象台信息
-			$("#edit").click(function(){
-				var companyId = $("#companyId2").val();
-				var deviceName = $("#deviceNameUpdate").val();
-				var deviceId = $("#deviceId2").val();
-				var id = $('#active').val();
-				if(deviceName == ''){
-					alert("请填写气象站名称！")
-					return false;
-				}
-				if(deviceId == ''){
-					alert("请填写气象台编号！");
-					return false;
-				}
-				$.ajax({
-					url: '/deviceController/updateDevice',
-					type: 'post',
-					data: {'id': id, 'deviceName' : deviceName, 'companyId.id' : companyId, 'deviceId' : deviceId},
-					success: function(res){
-						if(res == 'success'){
-							window.location.reload();
-						}
-					},
-					error : function(err){
-						$("#myForm2").hide();
-						var message = $("#message2");
-						message.show();
-						message.html("<span style='color:red'>更新失败</span>");
-						$(".btn-default").html('关闭');
-					}
-				});
-			});
-			
-			
-			//添加气象台
-			$("#add").click(function(){
-				var companyId = $("#companyId").val();
-				var deviceName = $("#deviceName").val();
-				var deviceId = $("#deviceId").val();
-				if(deviceName == ''){
-					alert("请填写气象站名称！")
-					return false;
-				}
-				if(deviceId == ''){
-					alert("请填写气象台编号！");
-					return false;
-				}
-				$.ajax({
-					url: '/deviceController/insertDevice',
-					type: 'post',
-					data: {'deviceName' : deviceName, 'companyId.id' : companyId, 'deviceId' : deviceId},
-					//dataType: 'json',
-					success: function(res){
-						if(res == 'success'){
-							window.location.reload();
-						}
-					},
-					error : function(err){
-						$("#myForm").hide();
-						var message = $("#message");
-						message.show();
-						message.html("<span style='color:red'>添加失败</span>");
-						$(".btn-default").html('关闭');
-					}
-				});
-			});
-			
-			
-			//删除气象台
-			$(".layui-btn-danger").click(function(){
-				
-				if(confirm('确定删除吗？')){
-				 var id = $(this).val();
-					$.ajax({
-						url: '/deviceController/deleteDeviceById',
-						type: 'post',
-						data: {'id' : id},
-						//dataType: 'json',
-						success: function(res){
-							if(res == 'success'){
-								//alert(JSON.stringify(res))
-								//alert("删除成功");
-								window.location.reload();
-							}
-						},
-						error : function(err){
-							alert(JSON.stringify(err))
-							alert("删除失败");
-						}
-					}); 
-				}
-			});
-		})
-	</script>
+
 
 </body>
 </html>

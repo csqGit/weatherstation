@@ -5,6 +5,7 @@
 <title>设备列表页</title>
 <link rel="stylesheet" href="../layui.css">
 <link rel="stylesheet" href="../public.css">
+<link rel="stylesheet" href="../head.css">
 <link rel="stylesheet" href="../main.css">
 <!-- <link href="../examples.css" rel="stylesheet" type="text/css"> -->
 
@@ -17,30 +18,25 @@
 <script type="text/javascript" src="../lay/modules/laydate.js"></script>
 <style type="text/css">
 .layui-table{margin: 5px 10px;}
-.layui-form-item .layui-input-inline {width: 150px}
-.search{margin-left: 10px;}
+.layui-form-item .layui-input-inline {width: 160px}
+.layui-form{margin-left: 10px;}
 
-.title{font-size: 16px; color: white;}
 #type{color: white;}
-
-
-@font-face {
-    src: url('../fonts/iconfont.ttf');
-	src: url('../fonts/iconfonnt.woff');
-}
 </style>
 </head>
 <body>
-	<div id="header" style="height:40px;">
-		<div class="title"><span>当前位置&nbsp;&nbsp;>>&nbsp;&nbsp;</span><span id="type" th:if="${type} eq 'history'" th:text="历史数据"></span>
+	<div id="header">
+		<img alt="" src="../head_add.png">
+		<!-- <div class="title"> -->
+		<span>当前位置&nbsp;&nbsp;>>&nbsp;&nbsp;</span><span id="type" th:if="${type} eq 'history'" th:text="历史数据"></span>
 			<span id="type" th:if="${type} eq 'this'" th:text="实时数据"></span>
-		</div>
+		<!-- </div> -->
 	</div>
 	<div class="none" id="location" th:text="${location}"></div>
-	<form th:action="${location}" method="get" class="search"  th:if="${type} eq 'history'">
+	<form th:action="${location}" method="get" class="search layui-form"  th:if="${type} eq 'history'">
 	<input type="hidden" name="param" th:value="${type}">
 	<div class="layui-form-item ">
-				<div class="layui-input-inline layui-input-block"  style="margin-left:0;" >
+				<div class="layui-input-inline layui-input-block"  style="margin-left:0; width: 170px;" >
 					<select id="device" name="deviceId" lay-verify="required"
 						class="layui-input" lay-search="">
     					<option value="">选择设备查询</option>
@@ -140,6 +136,8 @@
 			window.location.reload();
 		}, 45000);//45秒页面刷新一次
 	}
+	
+	
 </script>
 
 </html>

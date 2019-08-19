@@ -59,14 +59,14 @@
 	<!-- 分组查询所有设备的实时数据集合 c -->
 	<select id="selectDeviceAllThisData" resultMap="WeathersMap">
 		select
-		w.id,
 		w.dm,
 		w.sm, w.ta, w.ua, w.pa, w.time,d.device_name, d.device_state
 		from
 		weathers_tb w
 		INNER JOIN
 		(select
-		max(w.id) as maxid from weathers_tb w
+		max(w.id) as maxid from weathers_tb w 
+		where w.company_id = #{companyId}
 		group by w.device_id) as d
 		ON
 		w.id =
@@ -79,9 +79,12 @@
 		device_tb d
 		ON
 		d.device_id = w.device_id
+		
 		ORDER BY
 		w.time desc
 	</select>
+
+
 
 	<!-- 分组查询所有设备的实时数据集合 -->
 	<select id="selectDeviceAllThisDataCount"
@@ -92,7 +95,9 @@
 		weathers_tb w
 		INNER JOIN
 		(select
-		max(w.id) as maxid from weathers_tb w group by w.device_id) as d
+		max(w.id) as maxid 
+		from weathers_tb w  
+		where w.company_id = #{companyId} group by w.device_id) as d
 		ON
 		w.id =
 		d.maxid
@@ -104,20 +109,27 @@
 		device_tb d
 		ON
 		d.device_id = w.device_id
+		
 		ORDER BY
 		w.time desc
 	</select>
 
+
+
 	<!-- 根据日期选择查询起始时间startTime和结束时间endTime的设备id为deviceId的数据集合 c -->
 	<select id="selectDeviceWeathersHistoryDataByYMDSAndHMSS"
 		resultMap="WeathersMap">
-		select w.id, w.dm, w.sm, w.ta, w.ua, w.pa , w.time, d.device_name
+		select  w.dm, w.sm, w.ta, w.ua, w.pa , w.time, d.device_name
 		from weathers_tb w
 		inner join device_tb d on w.device_id = d.device_id inner
 		join company_tb c on
 		w.company_id = c.id where 1 = 1
+		
 		<if test="deviceId != null">
 			and w.device_id = #{deviceId}
+		</if>
+		<if test="companyId != 0">
+			and w.company_id = #{companyId}
 		</if>
 		<if test="startTime != null &amp;&amp; endTime != null">
 			and w.time &gt;= #{startTime} and w.time &lt;= #{endTime}
@@ -131,6 +143,7 @@
 	</select>
 
 
+
 	<select id="selectDeviceWeathersHistoryDataCountByYMDSAndHMSS"
 		resultType="java.lang.Integer">
 		select count(w.id) from weathers_tb w
@@ -141,96 +154,32 @@
 		<if test="deviceId != null">
 			and w.device_id = #{deviceId}
 		</if>
+		
 		<if test="startTime != null &amp;&amp; endTime != null">
 			and w.time between #{startTime} and #{endTime}
 		</if>
 	</select>
 
-	<!-- 非区间查询 开始时间不同，结束时间相同 -->
-	<select id="selectDeviceWeathersHistoryDataByYMDAndHMS"
-		resultMap="WeathersMap">
-		select w.id, w.dm, w.sm, w.ta, w.ua, w.pa , w.time, d.device_name from
-		weathers_tb w
-		inner join device_tb d on w.device_id = d.device_id inner join
-		company_tb c on
-		w.company_id = c.id where 1 = 1
-		<if test="deviceId != null">
-			and w.device_id = #{deviceId}
-		</if>
 
-		<if test="time != null">
-			and time like #{time}"%"
-		</if>
-		<if test="pageData.limit != 0">
-			limit #{pageData.startPage}, #{pageData.limit}
-		</if>
-
-	</select>
-
-
-	<!-- 非区间查询 开始时间不同，结束时间相同 -->
-	<select id="selectDeviceWeathersHistoryDataCountByYMDAndHMS"
-		resultType="java.lang.Integer">
-		SELECT count(id) FROM weathers_tb where 1 = 1
-		<if test="deviceId != null">
-			and device_id = #{deviceId}
-		</if>
-		<if test="time != null">
-			and time like #{time}"%"
-		</if>
-	</select>
-
-
-	<!-- 非区间查询 按年月日查询 -->
-	<select id="selectDeviceWeathersHistoryDataByYMD"
-		resultMap="WeathersMap">
-		select w.id, w.dm, w.sm, w.ta, w.ua, w.pa, w.time, d.device_name from
-		weathers_tb w
-		inner join device_tb d on w.device_id = d.device_id inner join
-		company_tb c on
-		w.company_id = c.id where 1 = 1
-		<if test="deviceId != null">
-			and w.device_id = #{deviceId}
-		</if>
-
-		<if test="time != null">
-			and time like #{time}"%"
-		</if>
-		<if test="pageData.limit != 0">
-			limit #{pageData.startPage}, #{pageData.limit}
-		</if>
-	</select>
-
-
-
-	<!-- 非区间查询 按年月日查询 总数 -->
-	<select id="selectDeviceWeathersHistoryDataCountByYMD"
-		resultType="java.lang.Integer">
-		select count(w.id) from weathers_tb w where 1 = 1
-		<if test="deviceId != null">
-			and w.device_id = #{deviceId}
-		</if>
-
-		<if test="time != null">
-			and w.time like #{time}"%"
-		</if>
-	</select>
 
 
 	<!-- 分页查询所有设备的历史数据 -->
 	<select id="selectDeviceAllWeathersHistoryDataList"
 		resultMap="WeathersMap">
-		select w.id, w.dm, w.sm, w.ta, w.ua, w.pa , w.time, d.device_name
+		select  w.dm, w.sm, w.ta, w.ua, w.pa , w.time, d.device_name
 		from
 		weathers_tb w
-		left join
+		inner join
 		device_tb d
 		on
 		d.device_id = w.device_id
-		left join
+		inner join
 		company_tb c
 		on
 		c.id = w.company_id
+		<if test="companyId != 0">
+		where w.company_id = #{companyId}
+		</if>
 		order by time desc
 		<if test="pageData.limit != 0">
 			limit #{pageData.startPage}, #{pageData.limit}
@@ -238,16 +187,22 @@
 
 	</select>
 
+
+
 	<select id="selectDeviceAllWeathersHistoryDataCount"
 		resultType="java.lang.Integer">
 		select count(id) from weathers_tb
+		<if test="companyId != 0">
+			where company_id = #{companyId}
+		</if>
 	</select>
+
 
 
 	<!-- 根据设备id查询设备的所有历史记录 -->
 	<select id="selectDeviceWeathersHistoryByDeviceId"
 		resultMap="WeathersMap">
-		select w.id, w.dm, w.sm, w.ta, w.ua, w.pa, w.time, d.device_name from
+		select  w.dm, w.sm, w.ta, w.ua, w.pa, w.time, d.device_name from
 		weathers_tb w
 		inner join device_tb d on w.device_id = d.device_id inner
 		join company_tb c on
@@ -262,6 +217,8 @@
 
 	</select>
 
+
+
 	<!-- 根据设备id查询设备的所有历史记录总数 -->
 	<select id="selectDeviceWeathersHistoryCountByDeviceId"
 		parameterType="java.lang.Integer" resultType="java.lang.Integer">
@@ -274,43 +231,13 @@
 	</select>
 
 
-	<!-- 非区间查询 按年月查询 -->
-	<select id="selectDeviceWeathersHistoryDataByYMAndDeviceId"
-		resultMap="WeathersMap">
-		select w.id, w.dm, w.sm, w.ta, w.ua, w.pa, w.time, d.device_name from
-		weathers_tb w
-		inner join device_tb d on w.device_id = d.device_id inner join
-		company_tb c on
-		w.company_id = c.id where 1 = 1
-		<if test="deviceId != null">
-			and w.device_id = #{deviceId}
-		</if>
 
-		<if test="time != null">
-			and time like #{time}"%"
-		</if>
-		<if test="pageData.limit != 0">
-			limit #{pageData.startPage}, #{pageData.limit}
-		</if>
-	</select>
-
-	<select id="selectDeviceWeathersHistoryDataCountByYMAndDeviceId"
-		resultType="java.lang.Integer">
-		select count(w.id) from weathers_tb w where 1 = 1
-		<if test="deviceId != null">
-			and w.device_id = #{deviceId}
-		</if>
-
-		<if test="time != null">
-			and time like #{time}"%"
-		</if>
-	</select>
 
 
 	<!-- 非区间查询 按年查询 -->
-	<select id="selectDeviceWeathersHistoryDataByYearAndDeviceId"
+	<select id="selectDeviceWeathersHistoryDataByDeviceIdAndTime"
 		resultMap="WeathersMap">
-		select w.id, w.dm, w.sm, w.ta, w.ua, w.pa, w.time, d.device_name from
+		select  w.dm, w.sm, w.ta, w.ua, w.pa, w.time, d.device_name from
 		weathers_tb w
 		inner join device_tb d on w.device_id = d.device_id inner join
 		company_tb c on
@@ -326,10 +253,49 @@
 			limit #{pageData.startPage}, #{pageData.limit}
 		</if>
 	</select>
+	
+	<!-- 查询风向 JSON-->
+		<select id="selectDeviceDataByDeviceIdAndTypeAndTime"
+		resultMap="WeathersMap">
+		select  
+		<if test="type == 0"><!-- 风向 -->
+			w.dm,
+		</if>
+		<if test="type == 1"><!-- 风速 -->
+			w.sm,
+		</if>
+		<if test="type == 2"><!-- 温度 -->
+			w.ta,
+		</if>
+		<if test="type == 3"><!-- 湿度 -->
+			w.ua,
+		</if>
+		<if test="type == 4"><!-- 压强 -->
+			w.pa,
+		</if>
+		w.time, d.device_name from
+		weathers_tb w
+		inner join device_tb d on w.device_id = d.device_id inner join
+		company_tb c on
+		w.company_id = c.id where 1 = 1
+		<if test="deviceId != null">
+			and w.device_id = #{deviceId}
+		</if>
+
+		<if test="startTime != null &amp;&amp; endTime != null &amp;&amp; time == null">
+			and w.time between #{startTime} and #{endTime}
+		</if>
+		
+		<if test="time != null &amp;&amp; startTime == null &amp;&amp; endTime == null">
+			and w.time like #{time}"%"
+		</if>
+	</select>
+
+
 
 	<!-- 非区间查询 按年查询总数 -->
 	<select
-		id="selectDeviceWeathersHistoryDataCountByYearAndDeviceId"
+		id="selectDeviceWeathersHistoryDataCountByDeviceIdAndTime"
 		resultType="java.lang.Integer">
 		select count(w.id) from weathers_tb w where 1 = 1
 		<if test="deviceId != null">
@@ -342,17 +308,6 @@
 	</select>
 
 
-	<!-- -->
-	<select id="selectHistoryDataJSONList" resultMap="WeathersMap"
-		parameterType="java.lang.Integer">
-		select 
-		w.dm, w.sm, w.ta, w.ua, w.pa, w.time,d.device_name from
-		weathers_tb
-		where 1=1
-		<if test="time != null">
-			and time like #{time}"%"
-		</if>
-	</select>
 
 
 
