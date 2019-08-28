@@ -4,18 +4,29 @@
 <meta charset="UTF-8">
 <title>气象站登录</title>
 <link rel="stylesheet" href="../layui.css">
+<script type="text/javascript" src="../jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../layui.js"></script>
+
 <style type="text/css">
-body{background: rgb(117, 217, 183)}
+body {
+	background: rgb(117, 217, 183)
+}
+
 #main {
 	width: 100%;
-	background: rgb(0, 0, 0,.1);
-	height: 300px;
+	background: rgb(0, 0, 0, .1);
+	height: 350px;
 	padding: 10px 0;
 }
-.left{float: left; line-height: 300px;}
+
+.left {
+	float: left;
+	line-height: 300px;
+}
+
 .right {
 	width: 500px;
-	height: 300px;
+	height: 350px;
 	margin-left: 50%;
 	background: white;
 	margin: 0 auto;
@@ -34,72 +45,105 @@ body{background: rgb(117, 217, 183)}
 	line-height: 35px;
 	padding-left: 10px;
 }
-header{height: 200px; width: 100%; color: white; font-size: 100px; text-align: center; line-height: 300px;}
-footer	{height: 200px; width: 100%;}
-#title{text-align: center; background: rgb(0, 150, 136); color: white; 
-height: 80px; line-height: 80px; font-size: 20px; font-family: Times, TimesNR, 'New Century Schoolbook', Georgia,
- 'New York', serif;}
+
+header {
+	height: 200px;
+	width: 100%;
+	color: white;
+	font-size: 100px;
+	text-align: center;
+	line-height: 300px;
+}
+
+footer {
+	height: 200px;
+	width: 100%;
+}
+
+#title {
+	text-align: center;
+	background: rgb(0, 150, 136);
+	color: white;
+	height: 80px;
+	line-height: 80px;
+	font-size: 20px;
+	font-family: Times, TimesNR, 'New Century Schoolbook', Georgia,
+		'New York', serif;
+}
+
+.layui-form-item .layui-input-inline{width: 220px;}
+#verificationCode {
+	background: rgb(234, 234, 234);
+	height: 38px;
+	width: 100px;
+	margin-left: 10px;
+	text-align: center;
+	cursor: pointer;
+	line-height: 38px;
+	font-size: 20px;
+	letter-spacing: 8px;
+	line-height: 38px
+}
 </style>
 </head>
 <body>
 	<header>
-		<div style="font-variant:small-caps;">Welcome</div>
+		<div style="font-variant: small-caps;">Welcome</div>
 	</header>
 	<div id="main">
 		<!-- <div class="left">用户登录</div> -->
 		<div class="right">
 			<div id="title">用户登录</div>
-			<form class="layui-form layui-form-pane"
-				action="./login" method="post">
+			<form class="layui-form layui-form-pane" action="./login"
+				method="post">
 				<div class="layui-form-item">
 					<label class="layui-form-label">用户名</label>
 					<div class="layui-input-inline">
 						<input type="text" id="username" name="username"
-							lay-verify="required" placeholder="请输入" autocomplete="off"
+							 lay-verify="title"  placeholder="请输入" autocomplete="off"
 							class="layui-input" th:value="${username}">
 					</div>
 					<div class="layui-form-err" th:text="${usernameErr}"></div>
 				</div>
 
 				<div class="layui-form-item">
-					<label class="layui-form-label">密码</label>
+					<label class="layui-form-label">密&nbsp;&nbsp;&nbsp;码</label>
 					<div class="layui-input-inline">
-						<input type="password" id="password" name="password"
+						<input type="password" id="password" name="password" lay-verify="title" 
 							placeholder="请输入密码" autocomplete="off" class="layui-input">
 					</div>
 					<div class="layui-form-err" th:text="${passwordErr}"></div>
 				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">验证码</label>
+					<div class="layui-input-inline" style="width: 100px;">
+						<input type="text" placeholder="请输入验证码" id="inputCode"
+							lay-verify="yzm" autocomplete="off" class="layui-input">
+					</div>
+
+					<div class="layui-input-inline yzm" id="verificationCode"></div>
+				</div>
+
 				<div style="color: red;" th:text="${systemErr}"></div>
 
 
-				<div class="layui-form-item" style="width: 150px; float: right;  margin-right: 70px; margin-top: 20px;">
-					<!-- a href="http://localhost:8080/login">登录</a> -->
-					<!-- <button class="layui-btn" lay-submit="" lay-filter="demo2">登录</button> -->
-					<input type="submit" class="layui-btn" value="提交">
-					<input class="layui-btn" type="reset">
+				<div class="layui-form-item"
+					style="width: 160px; float: right; margin-right: 70px; margin-top: 20px;">
+					<!-- <input type="submit" class="layui-btn" value="提交"> -->
+					 <button class="layui-btn" lay-submit="" lay-filter="submitForm">登&nbsp;&nbsp;录</button>
+					
+					 <input
+						class="layui-btn" type="reset" value="重&nbsp;&nbsp;置">
 				</div>
 			</form>
 
 		</div>
 	</div>
-		<footer>
-			<div></div>
-		</footer>
-
-	<script type="text/javascript">
-		/* 	function login(){
-		 var username = $("#username").val();
-		 var password = $("#password").val();
-		 $.ajax({
-		 url : 'http://localhost:8080/userController/login',
-		 type: 'post',
-		 data: {'username' : username, 'password' : password},
-		 success: function(res){
-		
-		 }
-		 });
-		 } */
-	</script>
+	<footer>
+		<div></div>
+	</footer>
+<script type="text/javascript" src="../login.js"></script>
 
 </body>
 </html>

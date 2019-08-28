@@ -107,11 +107,11 @@ function setChartOption(xOldData, yOldData, xName, yName, title,
 					}
 				}
 				
-//				if(temp == 0)	//没有值
-//					yData.push("-");
-				//假数据
 				if(temp == 0)	//没有值
-					yData.push(savePreData);
+					yData.push("-");
+				//假数据
+//				if(temp == 0)	//没有值
+//					yData.push(savePreData);
 			}else
 				yData.push("-");
 			len++;
