@@ -153,4 +153,10 @@ public class WeathersServiceImpl implements WeathersService {
 
 	}
 
+	@Override
+	public int insertWeathers(Weathers weathers) {
+		// TODO Auto-generated method stub
+		return weathersMapper.insertWeathers(weathers);
+	}
+
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bozpower.entity.Company;
 import com.bozpower.entity.Device;
 import com.bozpower.entity.PageData;
 import com.bozpower.entity.Weathers;
@@ -174,6 +175,35 @@ public class WeathersController {
 		
 		return weathersList;
 
+	}
+	
+	
+	@RequestMapping(value = "insertWeathers")
+	@ResponseBody
+	public String insertWeathers(Weathers weathers) {
+		try {
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String time = format.format(new Date());
+			System.out.println(weathers);
+			Company companyId = new Company();
+			companyId.setId(1);
+			Device deviceId = new Device();
+			deviceId.setDeviceId("$A2XDR");
+			weathers.setCompanyId(companyId);
+			weathers.setDeviceId(deviceId);
+			weathers.setTime(time);
+			weathers.setTa(weathers.getTa()  / 10);
+			weathers.setPa(weathers.getPa() / 10);
+			weathers.setUa(weathers.getUa() / 10);
+			weathers.setSm(weathers.getSm() / 10);
+			weathers.setDm(weathers.getDm() / 10);
+			weathersService.insertWeathers(weathers);
+			
+			return "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
 	}
 		
 

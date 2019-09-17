@@ -8,6 +8,9 @@ import com.bozpower.entity.PageData;
 import com.bozpower.entity.Weathers;
 
 public interface WeathersService {
+	
+	int insertWeathers(Weathers weathers);
+	
 	/**
 	 * 查询所有设备的实时数据
 	 * 

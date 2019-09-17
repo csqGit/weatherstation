@@ -13,7 +13,7 @@ import com.bozpower.entity.Weathers;
 public interface WeathersMapper {
 
 	
-	void insertWeathers(@Param("weathers") Weathers weathers);
+	int insertWeathers(@Param("weathers") Weathers weathers);
 	
 	
 	/**
@@ -63,6 +63,8 @@ public interface WeathersMapper {
 			@Param("startTime") String startTime, 
 			@Param("endTime") String endTime);
 	
+	
+
 	
 	
 	/**

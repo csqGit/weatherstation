@@ -44,14 +44,12 @@
 
 	<insert id="insertWeathers" parameterType="Weathers">
 		insert into
-		weathers_tb(id, dn, dm, dx, sn, sm, sx,ta, ua, pa,
-		time, company_id,
+		weathers_tb(  ta, ua, pa,time, company_id,
 		device_id, remarks )
 		values
-		(#{weathers.id},#{weathers.dn},#{weathers.dm},#{weathers.dx},#{weathers.sn},
-		#{weathers.sm},#{weathers.sx},#{weathers.ta}, #{weathers.ua},
-		#{weathers.pa},
-		#{weathers.time},#{weathers.companyId.id},#{weathers.deviceId.deviceId},#{weathers.remarks})
+		(  #{weathers.ta}, #{weathers.ua},
+		#{weathers.pa}, #{weathers.time},
+		#{weathers.companyId.id}, #{weathers.deviceId.deviceId}, #{weathers.remarks} )
 	</insert>
 
 
