@@ -7,7 +7,13 @@
 		<result column="device_number" property="deviceNumber" jdbcType="INTEGER"/>
 		<result column="remarks" property="remarks" jdbcType="VARCHAR"/>
   </resultMap>
-  
+  <cache>
+		<property name="timeToIdleSeconds" value="60"></property><!--&lt;!&ndash;当缓存闲置60秒后销毁&ndash;&gt;-->
+        <property name="timeToLiveSeconds" value="160"></property><!--&lt;!&ndash;缓存存在160秒后销毁&ndash;&gt;-->
+        <property name="maxEntriesLocalHeap" value="1000"></property>
+        <property name="maxEntriesLocalDisk" value="10000000"></property>
+        <property name="memoryStoreEvictionPolicy" value="LRU"></property>
+	</cache>
     <sql id="columnSql">
   		id, company_name, device_number, remarks
   	</sql>

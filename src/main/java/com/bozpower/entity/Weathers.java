@@ -1,8 +1,13 @@
 package com.bozpower.entity;
 
+import java.io.Serializable;
 
-public class Weathers {
-    private Integer id;
+public class Weathers implements Serializable {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Integer id;
     private Double dm;//平均风向
     private Double sm;//平均风速
     private Double ta;//温度

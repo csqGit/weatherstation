@@ -1,6 +1,12 @@
 package com.bozpower.entity;
 
-public class Device {
+import java.io.Serializable;
+
+public class Device  implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String deviceName;
 	private Company companyId;
